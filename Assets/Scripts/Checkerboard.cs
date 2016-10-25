@@ -19,7 +19,7 @@ public class Checkerboard : MonoBehaviour {
 				pawnList [i] = new Pawn[18];
 				for (int a = 0; a < 18; a++) 
 				{
-					Pawn tmp = (Pawn)Instantiate (Intersection.GetComponent<Pawn>(), new Vector3 (i, a, -5), Quaternion.identity);
+					Pawn tmp = (Pawn)Instantiate (Intersection.GetComponent<Pawn>(), new Vector3 (i, a, 0), Quaternion.identity);
 					pawnList[i][a] = tmp;
 				}
 			}
@@ -30,14 +30,5 @@ public class Checkerboard : MonoBehaviour {
 	void Update () {
 
 
-	}
-
-	void OnMouseOver()
-	{
-		if (Input.GetMouseButtonDown(0))
-			{
-				Debug.Log(Input.mousePosition.x);
-				Debug.Log(Input.mousePosition.y);
-			}
 	}
 }
