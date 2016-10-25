@@ -28,6 +28,16 @@ public class Checkerboard : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+
+
+	}
+
+	void OnMouseOver()
+	{
+		if (Input.GetMouseButtonDown(0)
+			{
+				Debug.Log(Input.mousePosition.x);
+				Debug.Log(Input.mousePosition.y);
+			}
 	}
 }
