@@ -43,6 +43,10 @@ public class Arbiter {
 
     public Board board = new Board();
 
+    public Player player1 = new Player(Board.e_cell.White);
+    public Player player2 = new Player(Board.e_cell.Black);
+    public Player currentPlayer;
+
     public static Arbiter Instance
     {
         get
@@ -54,6 +58,11 @@ public class Arbiter {
 
             return _instance;
         }
+    }
+
+    public Arbiter()
+    {
+        currentPlayer = player1;
     }
 
     private Vector2 checkPattern(int x, int y, t_Pattern pattern, Board.e_cell color, Vector2 direction)
@@ -117,15 +126,9 @@ public class Arbiter {
         return false;
     }
 
-    public int tryMove(int x, int y, Board.e_cell color)
+    public int move(int x, int y, Board.e_cell color)
     {
         int returnValue = 0;
-
-        if (x > 18 || y > 18 || x < 0 || y < 0 || color == Board.e_cell.Empty || board.grid[x][y] != Board.e_cell.Empty)
-            return 0;
-
-        if (isDoubleThree(x, y, color) == true)
-            return 0;
 
         board.grid[x][y] = color;
 
@@ -139,7 +142,33 @@ public class Arbiter {
         }
 
         if (isWinningMove(x, y, color))
-            returnValue *= -1;
+            returnValue = -1;
         return returnValue;
+    }
+
+    public void input(int x, int y)
+    {
+        if (x > 18 || y > 18 || x < 0 || y < 0 || board.grid[x][y] != Board.e_cell.Empty)
+            return;
+
+        if (isDoubleThree(x, y, currentPlayer.color) == true)
+            return;
+
+        int returnValue = move(x, y, currentPlayer.color);
+
+        if (returnValue == -1)
+        {
+
+        }
+        else
+        {
+            currentPlayer.capturedPawns += returnValue;
+        }
+
+        if (currentPlayer.capturedPawns >= 10)
+        {
+
+        }
+        currentPlayer = currentPlayer == player1 ? player2 : player1; 
     }
 }
