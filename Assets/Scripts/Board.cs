@@ -16,6 +16,11 @@ public class Board {
         for (int i = 0; i < 18 ; i++)
         {
             grid[i] = new e_cell[18];
+
+            for(int j = 0; j < 18; j++)
+            {
+                grid[i][j] = e_cell.Empty;
+            }
         }
     }
 

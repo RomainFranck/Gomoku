@@ -1,9 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-using t_Pattern = Tuple<int[], bool[]>;
+
+
+using t_Pattern = Tuple<int[], e_cellColor[]>;
+using System.Collections.Generic;
+
+enum e_cellColor
+{
+    Empty,
+    Same,
+    Inverse,
+};
 
 public class Arbiter {
+
+
 
     private static Vector2[] _directions = {new Vector2(1, 0),
                                             new Vector2(1, 1),
@@ -14,16 +26,18 @@ public class Arbiter {
                                             new Vector2(0, -1),
                                             new Vector2(1, -1)};
 
-    private static t_Pattern[] _freeThrees = {   (new t_Pattern(new int[]{-1, 1, 2, 3}, new bool[]{false, true, true, false})),
-                                                 (new t_Pattern(new int[]{-2, -1, 1, 2}, new bool[]{false, true, true, false})),
-                                                 (new t_Pattern(new int[]{-1, 1, 2, 3, 4}, new bool[]{false, true, false, true, false})),
-                                                 (new t_Pattern(new int[]{-2, -1, 1, 2, 3}, new bool[]{false, true, false, true, false})),
-                                                 (new t_Pattern(new int[]{-1, 1, 2, 3, 4}, new bool[]{false, false, true, true, false}))
+    private static t_Pattern[] _freeThrees = {   (new t_Pattern(new int[]{-1, 1, 2, 3}, new e_cellColor[]{e_cellColor.Empty, e_cellColor.Same, e_cellColor.Same, e_cellColor.Empty})),
+                                                 (new t_Pattern(new int[]{-2, -1, 1, 2}, new e_cellColor[]{e_cellColor.Empty, e_cellColor.Same, e_cellColor.Same, e_cellColor.Empty})),
+                                                 (new t_Pattern(new int[]{-1, 1, 2, 3, 4}, new e_cellColor[]{e_cellColor.Empty, e_cellColor.Same, e_cellColor.Empty, e_cellColor.Same, e_cellColor.Empty})),
+                                                 (new t_Pattern(new int[]{-2, -1, 1, 2, 3}, new e_cellColor[]{e_cellColor.Empty, e_cellColor.Same, e_cellColor.Empty, e_cellColor.Same, e_cellColor.Empty})),
+                                                 (new t_Pattern(new int[]{-1, 1, 2, 3, 4}, new e_cellColor[]{e_cellColor.Empty, e_cellColor.Empty, e_cellColor.Same, e_cellColor.Same, e_cellColor.Empty}))
     };
 
-    private static t_Pattern[] _winPatterns = { (new t_Pattern(new int[] { 1, 2, 3, 4 }, new bool[] { true, true, true, true })),
-                                                (new t_Pattern(new int[] {-1, 1, 2, 3 }, new bool[] { true, true, true, true })),
-                                                (new t_Pattern(new int[] {-2, -1, 1, 2 }, new bool[] { true, true, true, true }))};
+    private static t_Pattern[] _winPatterns = { (new t_Pattern(new int[] { 1, 2, 3, 4 }, new e_cellColor[] { e_cellColor.Same, e_cellColor.Same, e_cellColor.Same, e_cellColor.Same })),
+                                                (new t_Pattern(new int[] {-1, 1, 2, 3 }, new e_cellColor[] { e_cellColor.Same, e_cellColor.Same, e_cellColor.Same, e_cellColor.Same })),
+                                                (new t_Pattern(new int[] {-2, -1, 1, 2 }, new e_cellColor[] { e_cellColor.Same, e_cellColor.Same, e_cellColor.Same, e_cellColor.Same }))};
+
+    private static t_Pattern _pairPattern = new t_Pattern(new int[] { 1, 2, 3 }, new e_cellColor[] { e_cellColor.Inverse, e_cellColor.Inverse, e_cellColor.Same });
 
     private static Arbiter _instance = null;
 
@@ -42,39 +56,50 @@ public class Arbiter {
         }
     }
 
-    private bool checkPattern(int x, int y, t_Pattern pattern, Board.e_cell color)
+    private Vector2 checkPattern(int x, int y, t_Pattern pattern, Board.e_cell color, Vector2 direction)
     {
         bool isPattern = true;
 
-        foreach (Vector2 direction in _directions)
+        for (int i = 0; i < pattern.First.Length; i++)
         {
-            for (int i = 0; i < pattern.First.Length; i++)
-            {
-                Vector2 p = new Vector2(x + pattern.First[i] * (int)(direction.x), y + pattern.First[i] * (int)(direction.y));
+            Vector2 p = new Vector2(x + pattern.First[i] * (int)(direction.x), y + pattern.First[i] * (int)(direction.y));
 
-                if (p.x > 0 && p.x < 18 && p.y > 0 && p.y < 18)
-                {
-                    isPattern &= (_board.grid[(int)(p.x)][(int)(p.y)] != (pattern.Second[i] ? color : Board.e_cell.Empty));
-                }
+            if (p.x > 0 && p.x < 18 && p.y > 0 && p.y < 18)
+            {
+                isPattern &= (_board.grid[(int)(p.x)][(int)(p.y)] != (pattern.Second[i] == e_cellColor.Same ? color : pattern.Second[i] == e_cellColor.Inverse ? color == Board.e_cell.Black ? Board.e_cell.White : Board.e_cell.Black : Board.e_cell.Empty));
             }
         }
 
-        return isPattern;
+        return isPattern == true ? direction : Vector2.zero;
+    }
+
+    private List<Vector2> checkPatternInEveryDirection(int x, int y, t_Pattern pattern, Board.e_cell color)
+    {
+        List<Vector2> directionsList = new List<Vector2>();
+
+        foreach (Vector2 direction in _directions)
+        {
+            Vector2 dir = checkPattern(x, y, pattern, color, direction);
+
+            if (dir != Vector2.zero)
+            {
+                directionsList.Add(dir);
+            }
+        }
+
+        return directionsList;
     }
 
     private bool isDoubleThree(int x, int y, Board.e_cell color)
     {
-        int patterns = 0;
+        List<Vector2> directionsList = new List<Vector2>();
 
             foreach (t_Pattern pattern in _freeThrees)
             {
-                if(checkPattern(x, y, pattern, color))
-                {
-                    patterns++;
-                }
+                directionsList.AddRange(checkPatternInEveryDirection(x, y, pattern, color));
             }
 
-        if (patterns > 1)
+        if (directionsList.Count > 1)
             return true;
         return false;
     }
@@ -83,7 +108,7 @@ public class Arbiter {
     {
         foreach (t_Pattern pattern in _winPatterns)
         {
-            if (checkPattern(x, y, pattern, color))
+            if (checkPatternInEveryDirection(x, y, pattern, color).Count > 0)
             {
                 return true;
             }
@@ -99,6 +124,8 @@ public class Arbiter {
 
         if (isDoubleThree(x, y, color) == true)
             return 0;
+
+        List<Vector2> pair = checkPatternInEveryDirection(x, y, _pairPattern, color);
 
         if (isWinningMove(x, y, color))
             return 2;
