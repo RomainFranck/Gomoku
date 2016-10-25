@@ -79,14 +79,29 @@ public class Arbiter {
         return false;
     }
 
-    public bool tryMove(int x, int y, Board.e_cell color)
+    private bool isWinningMove(int x, int y, Board.e_cell color)
+    {
+        foreach (t_Pattern pattern in _winPatterns)
+        {
+            if (checkPattern(x, y, pattern, color))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int tryMove(int x, int y, Board.e_cell color)
     {
         if (x > 18 || y > 18 || x < 0 || y < 0 || color == Board.e_cell.Empty || _board.grid[x][y] != Board.e_cell.Empty)
-            return false;
+            return 0;
 
         if (isDoubleThree(x, y, color) == true)
-            return false;
+            return 0;
 
-        return true;
+        if (isWinningMove(x, y, color))
+            return 2;
+        return 1;
     }
 }
