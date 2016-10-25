@@ -41,7 +41,7 @@ public class Arbiter {
 
     private static Arbiter _instance = null;
 
-    private Board _board = new Board();
+    public Board board = new Board();
 
     public static Arbiter Instance
     {
@@ -66,7 +66,7 @@ public class Arbiter {
 
             if (p.x > 0 && p.x < 18 && p.y > 0 && p.y < 18)
             {
-                isPattern &= (_board.grid[(int)(p.x)][(int)(p.y)] != (pattern.Second[i] == e_cellColor.Same ? color : pattern.Second[i] == e_cellColor.Inverse ? color == Board.e_cell.Black ? Board.e_cell.White : Board.e_cell.Black : Board.e_cell.Empty));
+                isPattern &= (board.grid[(int)(p.x)][(int)(p.y)] != (pattern.Second[i] == e_cellColor.Same ? color : pattern.Second[i] == e_cellColor.Inverse ? color == Board.e_cell.Black ? Board.e_cell.White : Board.e_cell.Black : Board.e_cell.Empty));
             }
         }
 
@@ -119,13 +119,21 @@ public class Arbiter {
 
     public int tryMove(int x, int y, Board.e_cell color)
     {
-        if (x > 18 || y > 18 || x < 0 || y < 0 || color == Board.e_cell.Empty || _board.grid[x][y] != Board.e_cell.Empty)
+        if (x > 18 || y > 18 || x < 0 || y < 0 || color == Board.e_cell.Empty || board.grid[x][y] != Board.e_cell.Empty)
             return 0;
 
         if (isDoubleThree(x, y, color) == true)
             return 0;
 
+        board.grid[x][y] = color;
+
         List<Vector2> pair = checkPatternInEveryDirection(x, y, _pairPattern, color);
+
+        foreach (Vector2 direction in pair)
+        {
+            board.grid[x + (int)(direction.x) * _pairPattern.First[0]][y + (int)(direction.y) * _pairPattern.First[0]] = Board.e_cell.Empty;
+            board.grid[x + (int)(direction.x) * _pairPattern.First[1]][y + (int)(direction.y) * _pairPattern.First[1]] = Board.e_cell.Empty;
+        }
 
         if (isWinningMove(x, y, color))
             return 2;

@@ -24,5 +24,5 @@ public class Board {
         }
     }
 
-    public e_cell[][] grid;
+    public e_cell[][] grid { get; set}
 }
