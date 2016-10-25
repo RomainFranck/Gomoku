@@ -34,7 +34,7 @@ public class Checkerboard : MonoBehaviour {
 
 	void OnMouseOver()
 	{
-		if (Input.GetMouseButtonDown(0)
+		if (Input.GetMouseButtonDown(0))
 			{
 				Debug.Log(Input.mousePosition.x);
 				Debug.Log(Input.mousePosition.y);
