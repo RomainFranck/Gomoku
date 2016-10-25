@@ -119,6 +119,8 @@ public class Arbiter {
 
     public int tryMove(int x, int y, Board.e_cell color)
     {
+        int returnValue = 0;
+
         if (x > 18 || y > 18 || x < 0 || y < 0 || color == Board.e_cell.Empty || board.grid[x][y] != Board.e_cell.Empty)
             return 0;
 
@@ -133,10 +135,11 @@ public class Arbiter {
         {
             board.grid[x + (int)(direction.x) * _pairPattern.First[0]][y + (int)(direction.y) * _pairPattern.First[0]] = Board.e_cell.Empty;
             board.grid[x + (int)(direction.x) * _pairPattern.First[1]][y + (int)(direction.y) * _pairPattern.First[1]] = Board.e_cell.Empty;
+            returnValue += 2;
         }
 
         if (isWinningMove(x, y, color))
-            return 2;
-        return 1;
+            returnValue *= -1;
+        return returnValue;
     }
 }
