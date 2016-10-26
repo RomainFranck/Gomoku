@@ -5,25 +5,66 @@ using UnityEngine.UI;
 public class DisplayOverColor : MonoBehaviour {
 
 	// Use this for initialization
-	Text col;
+	RectTransform coll;
+
+
+	float W;
+	float H;
+	float Wup = 400;
+	float Wdown = 292;
+	float Hup = 70;
+	float Down = 36;
+	int k;
+	float i;
+	float j;
+
 	void Start () {
 
-		col = GetComponent<Text> ();
+		//col = GetComponent<Image> ();
+		coll = GetComponent<RectTransform> ();
+
+		W = GetComponent<RectTransform> ().rect.width;
+		H = GetComponent<RectTransform> ().rect.height;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 
-	public void pd()
+	public void Over()
 	{
-		col.color = Color.green;
-		//sound
+		StartCoroutine (scaleUp());
+		
+		//for (float j = 50; j > 0; j--)
+		//	coll.rect.size.x -= 1f;
+	}
+
+	IEnumerator scaleDown()
+	{
+		float time = Time.timeSinceLevelLoad;
+
+		while (Time.timeSinceLevelLoad - time < 1) 
+		{
+			coll.sizeDelta = new Vector2 (Wup - (Wup - Wdown) * (Time.timeSinceLevelLoad - time), H);
+			yield return null;
+		}
+	}
+
+	IEnumerator scaleUp()
+	{
+		float time = Time.timeSinceLevelLoad;
+
+		while (Time.timeSinceLevelLoad - time < 1) 
+		{
+			coll.sizeDelta = new Vector2 (W + (Wup - W) * (Time.timeSinceLevelLoad - time), H);
+			yield return null;
+		}
 	}
 
 	public void NotOver()
 	{
-		col.color = Color.black;
+		StartCoroutine (scaleDown ());
+		//coll.rect.height = H;
+		//coll.rect.width = W;
 	}
 }
