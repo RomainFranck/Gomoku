@@ -5,8 +5,8 @@ public class Pawn : MonoBehaviour
 {
 	public Renderer rend;
 
-	int posX;
-	int posY;
+	public int x;
+	public int y;
 
 	void Start()
 	{
@@ -39,13 +39,11 @@ public class Pawn : MonoBehaviour
 
 	void OnMouseOver()
 	{
+        Debug.Log("zizi");
 		if (Input.GetMouseButtonDown(0))
 		{
-			posX =  (int)(transform.position.x);
-			posY =  (int)(transform.position.y);
-
-			//Arbiter.Input.x = posX;
-			//Arbiter.Input.y = posY;
+            Debug.Log("prout");
+            Arbiter.Instance.input(x, y);
 		}
 	}
 }

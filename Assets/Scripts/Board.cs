@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Board {
 
+    public bool update = false;
+
     public enum e_cell
     {
         Empty,
