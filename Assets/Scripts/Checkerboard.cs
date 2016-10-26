@@ -23,13 +23,15 @@ public class Checkerboard : MonoBehaviour
             pawnList[i] = new Pawn[18];
             for (int j = 0; j < 18; j++)
             {
-                Pawn tmp = (Pawn)Instantiate(Intersection.GetComponent<Pawn>(), new Vector3(i, j, 0), Quaternion.identity);
+                Pawn tmp = (Pawn)Instantiate(Intersection.GetComponent<Pawn>(), new Vector3(i, j, 0), new Quaternion(0, 1, 0, 0));
+                tmp.transform.parent = transform;
                 pawnList[i][j] = tmp;
                 pawnList[i][j].x = i;
                 pawnList[i][j].y = j;
             }
         }
-        pawnList[1][1].SetColor(Board.e_cell.Black);
+
+        _board.update = true;
     }
 
     // Update is called once per frame

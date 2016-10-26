@@ -10,8 +10,8 @@ public class Pawn : MonoBehaviour
 
 	void Start()
 	{
-		rend = gameObject.GetComponent<Renderer> ();
-	}
+
+    }
 
 	void Update()
 	{
@@ -25,11 +25,11 @@ public class Pawn : MonoBehaviour
 		switch (newColor) {
 		case Board.e_cell.Black:
 			rend.enabled= true;
-			rend.material.color = Color.black;
+			rend.material.color = Color.blue;
 			break;
 		case Board.e_cell.White:
 			rend.enabled = true;
-			rend.material.color = Color.white;
+			rend.material.color = Color.red;
 			break;
 		case Board.e_cell.Empty:
 			rend.enabled = false;
@@ -39,10 +39,8 @@ public class Pawn : MonoBehaviour
 
 	void OnMouseOver()
 	{
-        Debug.Log("zizi");
 		if (Input.GetMouseButtonDown(0))
 		{
-            Debug.Log("prout");
             Arbiter.Instance.input(x, y);
 		}
 	}
