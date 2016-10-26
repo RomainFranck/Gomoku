@@ -5,10 +5,19 @@ using UnityEngine.UI;
 public class DisplayOverColor : MonoBehaviour {
 
 	// Use this for initialization
-	Text col;
+	RectTransform coll;
+
+
+	float W;
+	float H;
+
 	void Start () {
 
-		col = GetComponent<Text> ();
+		//col = GetComponent<Image> ();
+		coll = GetComponent<RectTransform> ();
+
+		W = GetComponent<RectTransform> ().rect.width;
+		H = GetComponent<RectTransform> ().rect.height;
 	}
 	
 	// Update is called once per frame
@@ -16,14 +25,24 @@ public class DisplayOverColor : MonoBehaviour {
 		
 	}
 
-	public void pd()
+	public void Over()
 	{
-		col.color = Color.green;
-		//sound
+		for (float i = 0; i < 50; i++) 
+		{
+			//Vector2 temp = new Vector2(coll.rect.size.x, coll.rect.size.y);
+			//temp.x += 1f;
+			coll.rect.Set(transform.position.x, transform.position.y, i, coll.rect.height);
+
+			//coll.rect.size.x += 1f;
+		}
+		
+		//for (float j = 50; j > 0; j--)
+		//	coll.rect.size.x -= 1f;
 	}
 
 	public void NotOver()
 	{
-		col.color = Color.black;
+		//coll.rect.height = H;
+		//coll.rect.width = W;
 	}
 }
