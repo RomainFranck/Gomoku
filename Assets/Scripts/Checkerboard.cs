@@ -29,7 +29,10 @@ public class Checkerboard : MonoBehaviour
                 pawnList[i][j].x = i;
                 pawnList[i][j].y = j;
             }
+            
         }
+
+        transform.Rotate(-30, 0, 0);
 
         _board.update = true;
     }
