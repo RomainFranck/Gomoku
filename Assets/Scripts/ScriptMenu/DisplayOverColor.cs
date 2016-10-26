@@ -10,6 +10,13 @@ public class DisplayOverColor : MonoBehaviour {
 
 	float W;
 	float H;
+	float Wup = 400;
+	float Wdown = 292;
+	float Hup = 70;
+	float Down = 36;
+	int k;
+	float i;
+	float j;
 
 	void Start () {
 
@@ -22,26 +29,41 @@ public class DisplayOverColor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 
 	public void Over()
 	{
-		for (float i = 0; i < 50; i++) 
-		{
-			//Vector2 temp = new Vector2(coll.rect.size.x, coll.rect.size.y);
-			//temp.x += 1f;
-			coll.rect.Set(transform.position.x, transform.position.y, i, coll.rect.height);
-
-			//coll.rect.size.x += 1f;
-		}
+		StartCoroutine (scaleUp());
 		
 		//for (float j = 50; j > 0; j--)
 		//	coll.rect.size.x -= 1f;
 	}
 
+	IEnumerator scaleDown()
+	{
+		float time = Time.timeSinceLevelLoad;
+
+		while (Time.timeSinceLevelLoad - time < 1) 
+		{
+			coll.sizeDelta = new Vector2 (Wup - (Wup - Wdown) * (Time.timeSinceLevelLoad - time), H);
+			yield return null;
+		}
+	}
+
+	IEnumerator scaleUp()
+	{
+		float time = Time.timeSinceLevelLoad;
+
+		while (Time.timeSinceLevelLoad - time < 1) 
+		{
+			coll.sizeDelta = new Vector2 (W + (Wup - W) * (Time.timeSinceLevelLoad - time), H);
+			yield return null;
+		}
+	}
+
 	public void NotOver()
 	{
+		StartCoroutine (scaleDown ());
 		//coll.rect.height = H;
 		//coll.rect.width = W;
 	}
