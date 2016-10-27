@@ -10,10 +10,10 @@ public class DisplayOverColor : MonoBehaviour {
 
 	float W;
 	float H;
-	float Wup = 400;
-	float Wdown = 292;
-	float Hup = 70;
-	float Down = 36;
+	float Wup = 600;
+	float Wdown = 407;
+	float Hup = 100;
+	float Down = 74;
 	int k;
 	float i;
 	float j;
@@ -29,6 +29,11 @@ public class DisplayOverColor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+	}
+
+	public void TurnAround()
+	{
+		//gameObject.transform.Rotate(gameObject.transform.rotation.x, gameObject.transform.rotation.y, gam
 	}
 
 	public void Over()
