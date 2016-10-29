@@ -5,16 +5,18 @@ using UnityEngine.UI;
 public class FlashTitle : MonoBehaviour {
 
 	// Use this for initialization
-	public Image img;
-	bool isBlnkink;
+	public Sprite []Title;
+
+	Image img;
+
+	//bool isBlnkink;
 	int counter;
 	int blinkspeed;
 
 	void Start () {	
-		img = GetComponent<Image> ();
-		isBlnkink = false;
 		counter = 0;
-		blinkspeed = 100;
+		blinkspeed = 300;
+		img = GetComponent<Image> ();
 	}
 	
 	// Update is called once per frame
@@ -26,19 +28,21 @@ public class FlashTitle : MonoBehaviour {
 			counter = 0;
 		}
 
-		if (counter > (blinkspeed / 2)) {
-			isBlnkink = true;
+		if (counter <= 100) {
+			img.sprite = Title[0];
 			
-		} else if (counter <= (blinkspeed / 2)) {
-			isBlnkink = false;
+		} else if (counter <= 200) {
+			img.sprite = Title[1];
+		} else if (counter <= 300) {
+			img.sprite = Title[2];
 		}
 
 		counter++;
 
-		if (isBlnkink)
+		/*if (isBlnkink)
 			img.enabled = true;
 		else
-			img.enabled = false;
+			img.enabled = false;*/
 	}
 	
 }
