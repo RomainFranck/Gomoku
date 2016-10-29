@@ -40,6 +40,11 @@ public class DisplayOverColor : MonoBehaviour {
 		turnOrNot = true;
 	}
 
+	public  void DontTurnAround()
+	{
+		turnOrNot = false;
+	}
+
 	public void Over()
 	{
 		StartCoroutine (scaleUp());
