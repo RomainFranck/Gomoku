@@ -17,9 +17,11 @@ public class DisplayOverColor : MonoBehaviour {
 	int k;
 	float i;
 	float j;
+	bool turnOrNot;
 
 	void Start () {
 
+		turnOrNot = false;
 		//col = GetComponent<Image> ();
 		coll = GetComponent<RectTransform> ();
 
@@ -29,11 +31,13 @@ public class DisplayOverColor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (turnOrNot)
+			transform.Rotate (Vector3.forward * (Time.deltaTime * 15));
 	}
 
 	public void TurnAround()
 	{
-		//gameObject.transform.Rotate(gameObject.transform.rotation.x, gameObject.transform.rotation.y, gam
+		turnOrNot = true;
 	}
 
 	public void Over()
@@ -46,7 +50,7 @@ public class DisplayOverColor : MonoBehaviour {
 
 	IEnumerator scaleDown()
 	{
-		float time = Time.timeSinceLevelLoad;
+		float time = Time.timeSinceLevelLoad; // 5
 
 		while (Time.timeSinceLevelLoad - time < 1) 
 		{
@@ -57,9 +61,9 @@ public class DisplayOverColor : MonoBehaviour {
 
 	IEnumerator scaleUp()
 	{
-		float time = Time.timeSinceLevelLoad;
+		float time = Time.timeSinceLevelLoad; // 5
 
-		while (Time.timeSinceLevelLoad - time < 1) 
+		while (Time.timeSinceLevelLoad - time < 1)
 		{
 			coll.sizeDelta = new Vector2 (W + (Wup - W) * (Time.timeSinceLevelLoad - time), H);
 			yield return null;
