@@ -4,8 +4,12 @@ using System.Collections;
 public class MenuManager : MonoBehaviour {
 
 	// Use this for initialization
+	public GameObject MainMenu;
+	public GameObject RulesObject;
+
+
 	void Start () {
-	
+
 	}
 	
 	// Update is called once per frame
@@ -16,6 +20,11 @@ public class MenuManager : MonoBehaviour {
 	public void Play()
 	{
 		Application.LoadLevel ("Checkboard");
+	}
+
+	public void Rules()
+	{
+		
 	}
 
 	public void Quit()
