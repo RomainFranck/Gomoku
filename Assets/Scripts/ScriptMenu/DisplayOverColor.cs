@@ -8,12 +8,13 @@ public class DisplayOverColor : MonoBehaviour {
 	RectTransform coll;
 
 
-	float W;
-	float H;
+	float Wbase;
+	float Hbase;
 	float Wup = 600;
 	float Wdown = 407;
 	float Hup = 100;
-	float Down = 74;
+	float Hdown = 74;
+    float ActionTime = 0.2f;
 	int k;
 	float i;
 	float j;
@@ -25,8 +26,8 @@ public class DisplayOverColor : MonoBehaviour {
 		//col = GetComponent<Image> ();
 		coll = GetComponent<RectTransform> ();
 
-		W = GetComponent<RectTransform> ().rect.width;
-		H = GetComponent<RectTransform> ().rect.height;
+		Wbase = GetComponent<RectTransform> ().rect.width;
+		Hbase = GetComponent<RectTransform> ().rect.height;
 	}
 	
 	// Update is called once per frame
@@ -47,38 +48,41 @@ public class DisplayOverColor : MonoBehaviour {
 
 	public void Over()
 	{
+        StopAllCoroutines();
 		StartCoroutine (scaleUp());
-		
-		//for (float j = 50; j > 0; j--)
-		//	coll.rect.size.x -= 1f;
 	}
 
-	IEnumerator scaleDown()
-	{
-		float time = Time.timeSinceLevelLoad; // 5
+    public void NotOver()
+    {
+        StopAllCoroutines();
+        StartCoroutine(scaleDown());
+    }
 
-		while (Time.timeSinceLevelLoad - time < 1) 
+    IEnumerator scaleDown()
+	{
+        float W = GetComponent<RectTransform>().rect.width;
+        float H = GetComponent<RectTransform>().rect.height;
+
+        float time = Time.timeSinceLevelLoad; // 5
+
+		while (Time.timeSinceLevelLoad - time < (ActionTime * (W - Wdown)/(Wup - Wdown))) 
 		{
-			coll.sizeDelta = new Vector2 (Wup - (Wup - Wdown) * (Time.timeSinceLevelLoad - time), H);
+			coll.sizeDelta = new Vector2 (W - (W - Wdown) * (Time.timeSinceLevelLoad - time) / ActionTime, H - (H - Hdown) * (Time.timeSinceLevelLoad - time) / ActionTime);
 			yield return null;
 		}
 	}
 
 	IEnumerator scaleUp()
 	{
-		float time = Time.timeSinceLevelLoad; // 5
+        float W = GetComponent<RectTransform>().rect.width;
+        float H = GetComponent<RectTransform>().rect.height;
 
-		while (Time.timeSinceLevelLoad - time < 1)
+        float time = Time.timeSinceLevelLoad; // 5
+
+		while (Time.timeSinceLevelLoad - time < (ActionTime * (Wup - W)/(Wup - Wdown)))
 		{
-			coll.sizeDelta = new Vector2 (W + (Wup - W) * (Time.timeSinceLevelLoad - time), H);
+			coll.sizeDelta = new Vector2 (W + (Wup - W) * (Time.timeSinceLevelLoad - time) / ActionTime, H + (Hup - H) * (Time.timeSinceLevelLoad - time) / ActionTime);
 			yield return null;
 		}
-	}
-
-	public void NotOver()
-	{
-		StartCoroutine (scaleDown ());
-		//coll.rect.height = H;
-		//coll.rect.width = W;
 	}
 }
