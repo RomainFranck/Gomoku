@@ -9,6 +9,13 @@ public class MenuManager : MonoBehaviour {
 	public GameObject RulesObject;
 	public GameObject ModeObject;
 
+	public RectTransform titleMenu;
+
+	public RectTransform[] t_Title;
+
+	public bool isFallingDownFinished = false;
+
+	float otherTime = 1000;
 
 	public enum e_MenuState{
 	
@@ -17,10 +24,11 @@ public class MenuManager : MonoBehaviour {
 		Mode,
 		Idle,
 	};
-	public e_MenuState menuState;
+	public e_MenuState menuState = e_MenuState.Idle;
 
 	void Start () {
-
+		for (int i = 0; i < t_Title.Length; i++)
+			StartCoroutine(letterFall(t_Title[i]));
 	}
 	
 	// Update is called once per frame
@@ -47,8 +55,36 @@ public class MenuManager : MonoBehaviour {
 			menuState = e_MenuState.Idle;
 			break;
 		}
-			
+		if (isFallingDownFinished) 
+		{
+			for (int i = 0; i < t_Title.Length; i++)
+				t_Title [i].gameObject.SetActive (false);
+			titleMenu.gameObject.SetActive (true);
+			isFallingDownFinished = false;
+			StartCoroutine (titleUp ());
+		}
+	}
 
+	IEnumerator titleUp()
+	{
+		while (titleMenu.localPosition.y < 435) 
+		{
+			titleMenu.localPosition = new Vector3 (titleMenu.localPosition.x, titleMenu.localPosition.y + Time.deltaTime * otherTime, 0);
+			yield return null;
+		}
+	}
+
+	IEnumerator letterFall(RectTransform p_rect)
+	{
+		float randTime = Random.Range (-200, 200);
+
+		while (p_rect.localPosition.y > (-100)) {
+			p_rect.localPosition = new Vector3 (p_rect.localPosition.x, p_rect.localPosition.y - Time.deltaTime * (otherTime + randTime), 0);
+			yield return null;
+			isFallingDownFinished = false;
+		}
+		p_rect.localPosition = new Vector3 (p_rect.localPosition.x, -100, 0);
+		isFallingDownFinished = true;
 	}
 
 	public void setMenuState(string p_menuState)
