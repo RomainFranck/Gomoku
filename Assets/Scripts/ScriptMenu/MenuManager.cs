@@ -13,6 +13,10 @@ public class MenuManager : MonoBehaviour {
 
 	public RectTransform[] t_Title;
 
+	public AudioSource theSong;
+	public AudioClip punch;
+	public AudioClip whoosh;
+
 	public bool isFallingDownFinished = false;
 	public bool isBlinking = false;
 
@@ -28,6 +32,7 @@ public class MenuManager : MonoBehaviour {
 	public e_MenuState menuState = e_MenuState.Idle;
 
 	void Start () {
+		theSong = GetComponent<AudioSource> ();
 		for (int i = 0; i < t_Title.Length; i++)
 			StartCoroutine(letterFall(t_Title[i]));
 	}
@@ -61,6 +66,8 @@ public class MenuManager : MonoBehaviour {
 			for (int i = 0; i < t_Title.Length; i++)
 				t_Title [i].gameObject.SetActive (false);
 			titleMenu.gameObject.SetActive (true);
+			theSong.clip = punch;
+			theSong.Play ();
 			isFallingDownFinished = false;
 			StartCoroutine (titleUp ());
 		}
