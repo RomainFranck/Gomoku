@@ -15,6 +15,7 @@ public class MenuManager : MonoBehaviour {
 		Main, 
 		Rules,
 		Mode,
+		Idle,
 	};
 	public e_MenuState menuState;
 
@@ -41,6 +42,9 @@ public class MenuManager : MonoBehaviour {
 			MainMenu.SetActive (true);
 			ModeObject.SetActive (false);
 			RulesObject.SetActive (false);
+			break;
+		default: 
+			menuState = e_MenuState.Idle;
 			break;
 		}
 			
