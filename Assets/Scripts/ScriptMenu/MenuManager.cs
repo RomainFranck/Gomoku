@@ -14,8 +14,11 @@ public class MenuManager : MonoBehaviour {
 	public RectTransform[] t_Title;
 
 	public AudioSource theSong;
-	public AudioClip punch;
+	public AudioSource theMusic;
+
+	public AudioClip crashCar;
 	public AudioClip whoosh;
+	public AudioClip musicMenu;
 
 	public bool isFallingDownFinished = false;
 	public bool isBlinking = false;
@@ -33,8 +36,11 @@ public class MenuManager : MonoBehaviour {
 
 	void Start () {
 		theSong = GetComponent<AudioSource> ();
+		theMusic = GetComponent<AudioSource> ();
 		for (int i = 0; i < t_Title.Length; i++)
 			StartCoroutine(letterFall(t_Title[i]));
+		theSong.clip = crashCar;
+		theSong.Play ();
 	}
 	
 	// Update is called once per frame
@@ -42,23 +48,23 @@ public class MenuManager : MonoBehaviour {
 		switch (menuState) {
 		case(e_MenuState.Rules):
 
-			theSong.clip = whoosh;
-			theSong.Play ();
+			//theSong.clip = whoosh;
+			//theSong.Play ();
 			MainMenu.SetActive (false);
 			RulesObject.SetActive (true);
 			break;
 		case(e_MenuState.Mode):
 
-			theSong.clip = whoosh;
-			theSong.Play ();
+			//theSong.clip = whoosh;
+			//theSong.Play ();
 			MainMenu.SetActive (false);
 			ModeObject.SetActive (true);
 			break;
 
 		case(e_MenuState.Main):
 
-			theSong.clip = whoosh;
-			theSong.Play ();
+			//theSong.clip = whoosh;
+			//theSong.Play ();
 			MainMenu.SetActive (true);
 			ModeObject.SetActive (false);
 			RulesObject.SetActive (false);
@@ -78,8 +84,6 @@ public class MenuManager : MonoBehaviour {
 
 	IEnumerator titleUp()
 	{
-		theSong.clip = punch;
-		theSong.Play ();
 		while (titleMenu.localPosition.y < 435) 
 		{
 			titleMenu.localPosition = new Vector3 (titleMenu.localPosition.x, titleMenu.localPosition.y + Time.deltaTime * (otherTime - 500), 0);
@@ -87,6 +91,8 @@ public class MenuManager : MonoBehaviour {
 		}
 		MainMenu.SetActive (true);
 		isBlinking = true;
+		theMusic.clip = musicMenu;
+		theMusic.Play ();
 	}
 
 	IEnumerator letterFall(RectTransform p_rect)
