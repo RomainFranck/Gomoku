@@ -60,6 +60,7 @@ public class DisplayOverColor : MonoBehaviour {
 
     public void OnEnable()
     {
+		coll = GetComponent<RectTransform> ();
         StopAllCoroutines();
         StartCoroutine(scaleDown());
     }
