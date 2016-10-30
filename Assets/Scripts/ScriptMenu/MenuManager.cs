@@ -42,17 +42,23 @@ public class MenuManager : MonoBehaviour {
 		switch (menuState) {
 		case(e_MenuState.Rules):
 
+			theSong.clip = whoosh;
+			theSong.Play ();
 			MainMenu.SetActive (false);
 			RulesObject.SetActive (true);
 			break;
 		case(e_MenuState.Mode):
 
+			theSong.clip = whoosh;
+			theSong.Play ();
 			MainMenu.SetActive (false);
 			ModeObject.SetActive (true);
 			break;
 
 		case(e_MenuState.Main):
 
+			theSong.clip = whoosh;
+			theSong.Play ();
 			MainMenu.SetActive (true);
 			ModeObject.SetActive (false);
 			RulesObject.SetActive (false);
@@ -61,20 +67,19 @@ public class MenuManager : MonoBehaviour {
 			menuState = e_MenuState.Idle;
 			break;
 		}
-		if (isFallingDownFinished) 
-		{
+		if (isFallingDownFinished) {
 			for (int i = 0; i < t_Title.Length; i++)
 				t_Title [i].gameObject.SetActive (false);
 			titleMenu.gameObject.SetActive (true);
-			theSong.clip = punch;
-			theSong.Play ();
-			isFallingDownFinished = false;
+			isFallingDownFinished = false;		
 			StartCoroutine (titleUp ());
 		}
 	}
 
 	IEnumerator titleUp()
 	{
+		theSong.clip = punch;
+		theSong.Play ();
 		while (titleMenu.localPosition.y < 435) 
 		{
 			titleMenu.localPosition = new Vector3 (titleMenu.localPosition.x, titleMenu.localPosition.y + Time.deltaTime * (otherTime - 500), 0);
