@@ -15,15 +15,11 @@ public class DisplayOverColor : MonoBehaviour {
 	float Hup = 100;
 	float Hdown = 74;
     float ActionTime = 0.2f;
-	int k;
-	float i;
-	float j;
 	bool turnOrNot;
 
 	void Start () {
 
 		turnOrNot = false;
-		//col = GetComponent<Image> ();
 		coll = GetComponent<RectTransform> ();
 
 		Wbase = GetComponent<RectTransform> ().rect.width;
@@ -69,8 +65,8 @@ public class DisplayOverColor : MonoBehaviour {
 	{
         float W = GetComponent<RectTransform>().rect.width;
         float H = GetComponent<RectTransform>().rect.height;
-
-        float time = Time.timeSinceLevelLoad; // 5
+        
+        float time = Time.timeSinceLevelLoad;
 
 		while (Time.timeSinceLevelLoad - time < (ActionTime * (W - Wdown)/(Wup - Wdown))) 
 		{
@@ -84,7 +80,7 @@ public class DisplayOverColor : MonoBehaviour {
         float W = GetComponent<RectTransform>().rect.width;
         float H = GetComponent<RectTransform>().rect.height;
 
-        float time = Time.timeSinceLevelLoad; // 5
+        float time = Time.timeSinceLevelLoad;
 
 		while (Time.timeSinceLevelLoad - time < (ActionTime * (Wup - W)/(Wup - Wdown)))
 		{
