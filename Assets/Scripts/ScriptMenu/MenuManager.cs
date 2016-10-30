@@ -48,23 +48,17 @@ public class MenuManager : MonoBehaviour {
 		switch (menuState) {
 		case(e_MenuState.Rules):
 
-			//theSong.clip = whoosh;
-			//theSong.Play ();
 			MainMenu.SetActive (false);
 			RulesObject.SetActive (true);
 			break;
 		case(e_MenuState.Mode):
 
-			//theSong.clip = whoosh;
-			//theSong.Play ();
 			MainMenu.SetActive (false);
 			ModeObject.SetActive (true);
 			break;
 
 		case(e_MenuState.Main):
 
-			//theSong.clip = whoosh;
-			//theSong.Play ();
 			MainMenu.SetActive (true);
 			ModeObject.SetActive (false);
 			RulesObject.SetActive (false);
