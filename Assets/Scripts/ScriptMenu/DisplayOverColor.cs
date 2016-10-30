@@ -58,6 +58,12 @@ public class DisplayOverColor : MonoBehaviour {
         StartCoroutine(scaleDown());
     }
 
+    public void OnEnable()
+    {
+        StopAllCoroutines();
+        StartCoroutine(scaleDown());
+    }
+
     IEnumerator scaleDown()
 	{
         float W = GetComponent<RectTransform>().rect.width;
