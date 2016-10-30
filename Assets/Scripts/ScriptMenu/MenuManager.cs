@@ -14,8 +14,9 @@ public class MenuManager : MonoBehaviour {
 	public RectTransform[] t_Title;
 
 	public bool isFallingDownFinished = false;
+	public bool isBlinking = false;
 
-	float otherTime = 1000;
+	float otherTime = 700;
 
 	public enum e_MenuState{
 	
@@ -69,9 +70,11 @@ public class MenuManager : MonoBehaviour {
 	{
 		while (titleMenu.localPosition.y < 435) 
 		{
-			titleMenu.localPosition = new Vector3 (titleMenu.localPosition.x, titleMenu.localPosition.y + Time.deltaTime * otherTime, 0);
+			titleMenu.localPosition = new Vector3 (titleMenu.localPosition.x, titleMenu.localPosition.y + Time.deltaTime * (otherTime - 500), 0);
 			yield return null;
 		}
+		MainMenu.SetActive (true);
+		isBlinking = true;
 	}
 
 	IEnumerator letterFall(RectTransform p_rect)
@@ -116,19 +119,4 @@ public class MenuManager : MonoBehaviour {
 	{
 		Application.Quit ();
 	}
-		
-	/*void OnMouseDown()
-	{
-		if (Input.GetMouseButtonDown(0)) 
-		{
-			Debug.Log("passe");
-			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-			RaycastHit hit;
-
-			if (Physics.Raycast (ray, out hit, 100)) 
-			{
-				if (hit.transform.gameObject.name == "Joueur")
-					Application.LoadLevel ("Checkboard");
-			}
-		}*/
-	}
+}
