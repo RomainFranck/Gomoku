@@ -54,4 +54,9 @@ public class Checkerboard : MonoBehaviour
         }
 
     }
+
+	public void Quit()
+	{
+		Application.Quit ();
+	}
 }
