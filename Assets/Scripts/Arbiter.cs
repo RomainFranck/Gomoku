@@ -7,6 +7,7 @@ using t_Pattern = Tuple<int[], e_cellColor[]>;
 using t_vecPattern = Tuple<UnityEngine.Vector2, Tuple<int[], e_cellColor[]>>;
 
 using System.Collections.Generic;
+using System;
 
 enum e_cellColor
 {
@@ -29,6 +30,16 @@ public class Arbiter
                                             new Vector2(0, -1),
                                             new Vector2(1, -1)};
 
+    internal void AddLight(TrafficLightComponent trafficLightComponent, int order)
+    {
+        if (order == 0)
+        {
+            player1.trafficLight = trafficLightComponent;
+        }
+        else
+            player2.trafficLight = trafficLightComponent;
+    }
+
     private static t_Pattern[] _freeThrees = {   (new t_Pattern(new int[]{-1, 1, 2, 3}, new e_cellColor[]{e_cellColor.Empty, e_cellColor.Same, e_cellColor.Same, e_cellColor.Empty})),
                                                  (new t_Pattern(new int[]{-2, -1, 1, 2}, new e_cellColor[]{e_cellColor.Empty, e_cellColor.Same, e_cellColor.Same, e_cellColor.Empty})),
                                                  (new t_Pattern(new int[]{-1, 1, 2, 3, 4}, new e_cellColor[]{e_cellColor.Empty, e_cellColor.Same, e_cellColor.Empty, e_cellColor.Same, e_cellColor.Empty})),
@@ -49,6 +60,18 @@ public class Arbiter
     public Player player1 = new Player(Board.e_cell.White);
     public Player player2 = new Player(Board.e_cell.Black);
     public Player currentPlayer;
+
+    private static bool checkDoubleThrees = true;
+    public static void toggleDoubleThrees()
+    {
+        checkDoubleThrees = !checkDoubleThrees;
+    }
+
+    private static bool checkBreakableFive = true;
+    public static void toggleBreakableFive()
+    {
+        checkBreakableFive = !checkBreakableFive;
+    }
 
     public static Arbiter Instance
     {
@@ -120,7 +143,7 @@ public class Arbiter
                 {
                     vecToRemove.Add(directionsList.Find((t_vecPattern obj) => { return obj.First == new Vector2(dir.First.x * -1, dir.First.y * -1); }));
                 }
-                
+
                 foreach(t_vecPattern toRemove in vecToRemove)
                 {
                     directionsList.Remove(toRemove);
@@ -188,7 +211,7 @@ public class Arbiter
         if (x > 18 || y > 18 || x < 0 || y < 0 || board.grid[x][y] != Board.e_cell.Empty)
             return;
 
-        if (isDoubleThree(x, y, currentPlayer.color) == true)
+        if (checkDoubleThrees && isDoubleThree(x, y, currentPlayer.color) == true)
             return;
 
         int returnValue = move(x, y, currentPlayer.color);
@@ -209,7 +232,9 @@ public class Arbiter
 
         }
 
-
+        currentPlayer.setLight(false);
         currentPlayer = currentPlayer == player1 ? player2 : player1;
+        currentPlayer.setLight(true);
+
     }
 }
