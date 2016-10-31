@@ -59,4 +59,9 @@ public class Checkerboard : MonoBehaviour
 	{
 		Application.Quit ();
 	}
+
+	public void Retour()
+	{
+		Application.LoadLevel("Menu");
+	}
 }
