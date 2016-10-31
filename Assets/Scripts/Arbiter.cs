@@ -18,7 +18,7 @@ enum e_cellColor
 
 public class Arbiter
 {
-
+    public bool isPlaying { get; private set; }
 
 
     private static Vector2[] _directions = {new Vector2(1, 0),
@@ -30,15 +30,6 @@ public class Arbiter
                                             new Vector2(0, -1),
                                             new Vector2(1, -1)};
 
-    internal void AddLight(TrafficLightComponent trafficLightComponent, int order)
-    {
-        if (order == 0)
-        {
-            player1.trafficLight = trafficLightComponent;
-        }
-        else
-            player2.trafficLight = trafficLightComponent;
-    }
 
     private static t_Pattern[] _freeThrees = {   (new t_Pattern(new int[]{-1, 1, 2, 3}, new e_cellColor[]{e_cellColor.Empty, e_cellColor.Same, e_cellColor.Same, e_cellColor.Empty})),
                                                  (new t_Pattern(new int[]{-2, -1, 1, 2}, new e_cellColor[]{e_cellColor.Empty, e_cellColor.Same, e_cellColor.Same, e_cellColor.Empty})),
@@ -51,15 +42,31 @@ public class Arbiter
                                                 (new t_Pattern(new int[] {-1, 1, 2, 3 }, new e_cellColor[] { e_cellColor.Same, e_cellColor.Same, e_cellColor.Same, e_cellColor.Same })),
                                                 (new t_Pattern(new int[] {-2, -1, 1, 2 }, new e_cellColor[] { e_cellColor.Same, e_cellColor.Same, e_cellColor.Same, e_cellColor.Same }))};
 
+    private static t_Pattern[] _breakPatterns = { (new t_Pattern(new int[] { -1, 1, 2}, new e_cellColor[] { e_cellColor.Empty, e_cellColor.Same, e_cellColor.Inverse})),
+                                                    (new t_Pattern(new int[] { -1, 1, 2}, new e_cellColor[] { e_cellColor.Inverse, e_cellColor.Same, e_cellColor.Empty})),
+    };
+
     private static t_Pattern _pairPattern = new t_Pattern(new int[] { 1, 2, 3 }, new e_cellColor[] { e_cellColor.Inverse, e_cellColor.Inverse, e_cellColor.Same });
 
     private static Arbiter _instance = null;
 
     public Board board = new Board();
 
-    public Player player1 = new Player(Board.e_cell.White);
-    public Player player2 = new Player(Board.e_cell.Black);
+    public Player player1 = new Player("player 1", Board.e_cell.White);
+    public Player player2 = new Player("player 2", Board.e_cell.Black);
     public Player currentPlayer;
+
+    internal void AddLight(TrafficLightComponent trafficLightComponent, int order)
+    {
+        if (order == 0)
+        {
+            player1.trafficLight = trafficLightComponent;
+        }
+        else
+            player2.trafficLight = trafficLightComponent;
+    }
+
+    public TextMesh textMesh;
 
     private static bool checkDoubleThrees = true;
     public static void toggleDoubleThrees()
@@ -88,6 +95,7 @@ public class Arbiter
 
     public Arbiter()
     {
+        isPlaying = true;
         currentPlayer = player1;
     }
 
@@ -176,9 +184,26 @@ public class Arbiter
     {
         foreach (t_Pattern pattern in _winPatterns)
         {
-            if (checkPatternInEveryDirection(x, y, pattern, color).Count > 0)
+            List<t_vecPattern> winningPatterns = checkPatternInEveryDirection(x, y, pattern, color);
+            foreach (t_vecPattern winPat in winningPatterns)
             {
-                return true;
+                if (checkBreakableFive == false)
+                {
+                    return true;
+                }
+
+                List<t_vecPattern> breakers = new List<t_vecPattern>();
+                for (int i = 0; i < winPat.Second.First.Length; i++)
+                {
+                    foreach (t_Pattern pat in _breakPatterns)
+                    {
+                        breakers.AddRange(checkPatternInEveryDirection(x + winPat.Second.First[i] * (int)winPat.First.x, y + winPat.Second.First[i] * (int)winPat.First.y, pat, color));
+                    }
+                }
+
+                if (breakers.Count == 0)
+                    return true;
+                Debug.Log(breakers.Count);
             }
         }
 
@@ -192,7 +217,6 @@ public class Arbiter
         board.grid[x][y] = color;
 
         List<t_vecPattern> pair = checkPatternInEveryDirection(x, y, _pairPattern, color);
-        Debug.Log(pair.Count);
 
         foreach (t_vecPattern dir in pair)
         {
@@ -208,7 +232,7 @@ public class Arbiter
 
     public void input(int x, int y)
     {
-        if (x > 18 || y > 18 || x < 0 || y < 0 || board.grid[x][y] != Board.e_cell.Empty)
+        if ((isPlaying == false)||x > 18 || y > 18 || x < 0 || y < 0 || board.grid[x][y] != Board.e_cell.Empty)
             return;
 
         if (checkDoubleThrees && isDoubleThree(x, y, currentPlayer.color) == true)
@@ -220,16 +244,23 @@ public class Arbiter
 
         if (returnValue == -1)
         {
-            Debug.Log("you win lol");
+            isPlaying = false;
+           if (textMesh != null)
+            {
+                textMesh.text = currentPlayer.name + " wins";
+            }
         }
         else
         {
             currentPlayer.capturedPawns += returnValue;
-        }
-
-        if (currentPlayer.capturedPawns >= 10)
-        {
-
+            if (currentPlayer.capturedPawns >= 10)
+            {
+                isPlaying = false;
+                if (textMesh != null)
+                {
+                    textMesh.text = currentPlayer.name + " wins by capture";
+                }
+            }
         }
 
         currentPlayer.setLight(false);
