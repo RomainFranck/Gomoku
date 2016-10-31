@@ -109,7 +109,7 @@ public class Arbiter
 
             if (p.x > 0 && p.x < 18 && p.y > 0 && p.y < 18)
             {
-                isPattern &= (board.grid[(int)(p.x)][(int)(p.y)] == (pattern.Second[i] == e_cellColor.Same ? color : pattern.Second[i] == e_cellColor.Inverse ? color == Board.e_cell.Black ? Board.e_cell.White : Board.e_cell.Black : Board.e_cell.Empty));
+                isPattern &= (board[(int)(p.x), (int)(p.y)] == (pattern.Second[i] == e_cellColor.Same ? color : pattern.Second[i] == e_cellColor.Inverse ? color == Board.e_cell.Black ? Board.e_cell.White : Board.e_cell.Black : Board.e_cell.Empty));
             }
             else
             {
@@ -133,6 +133,8 @@ public class Arbiter
                 directionsList.Add(dir);
             }
         }
+
+        Debug.Log(directionsList.Count);
 
         return directionsList;
     }
@@ -214,14 +216,14 @@ public class Arbiter
     {
         int returnValue = 0;
 
-        board.grid[x][y] = color;
+        board[x, y] = color;
 
         List<t_vecPattern> pair = checkPatternInEveryDirection(x, y, _pairPattern, color);
 
         foreach (t_vecPattern dir in pair)
         {
-            board.grid[x + (int)(dir.First.x) * _pairPattern.First[0]][y + (int)(dir.First.y) * _pairPattern.First[0]] = Board.e_cell.Empty;
-            board.grid[x + (int)(dir.First.x) * _pairPattern.First[1]][y + (int)(dir.First.y) * _pairPattern.First[1]] = Board.e_cell.Empty;
+            board[x + (int)(dir.First.x) * _pairPattern.First[0], y + (int)(dir.First.y) * _pairPattern.First[0]] = Board.e_cell.Empty;
+            board[x + (int)(dir.First.x) * _pairPattern.First[1], y + (int)(dir.First.y) * _pairPattern.First[1]] = Board.e_cell.Empty;
             returnValue += 2;
         }
 
@@ -232,7 +234,7 @@ public class Arbiter
 
     public void input(int x, int y)
     {
-        if ((isPlaying == false)||x > 18 || y > 18 || x < 0 || y < 0 || board.grid[x][y] != Board.e_cell.Empty)
+        if ((isPlaying == false)||x > 18 || y > 18 || x < 0 || y < 0 || board[x, y] != Board.e_cell.Empty)
             return;
 
         if (checkDoubleThrees && isDoubleThree(x, y, currentPlayer.color) == true)

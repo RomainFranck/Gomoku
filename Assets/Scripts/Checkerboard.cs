@@ -46,7 +46,7 @@ public class Checkerboard : MonoBehaviour
             {
                 for (int j = 0; j < 18; j++)
                 {
-                    pawnList[i][j].SetColor(_board.grid[i][j]);
+                    pawnList[i][j].SetColor(_board[i, j]);
                 }
             }
 

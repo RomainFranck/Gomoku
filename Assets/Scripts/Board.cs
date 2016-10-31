@@ -5,26 +5,35 @@ public class Board {
 
     public bool update = false;
 
+    private char[] _byteBoard = new char[81];
+
+    public e_cell this[int x, int y]
+    {
+        get { return (e_cell)((_byteBoard[(x * 18 + y) / 4] >> (2 * ((x * 18 + y) % 4))) % 4); }
+        set { char octet = _byteBoard[(x * 18 + y) / 4];
+            char shift = (char)(2 * ((x * 18 + y) % 4));
+            char mask = (char)(3 << shift);
+            char val = (char)((int)value << shift);
+            _byteBoard[(x * 18 + y) / 4] = (char)(octet & ~mask | val); }
+    }
+
     public enum e_cell
     {
-        Empty,
-        Black,
-        White,
+        Empty = 0,
+        Black = 1,
+        White = 2,
     };
 
     public Board()
     {
-        grid = new e_cell[18][];
         for (int i = 0; i < 18 ; i++)
         {
-            grid[i] = new e_cell[18];
-
             for(int j = 0; j < 18; j++)
             {
-                grid[i][j] = e_cell.Empty;
+                this[i, j] = e_cell.Empty;
             }
         }
     }
 
-    public e_cell[][] grid { get; set; }
+
 }
