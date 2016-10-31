@@ -14,8 +14,11 @@ public class MenuManager : MonoBehaviour {
 	public RectTransform[] t_Title;
 
 	public AudioSource theSong;
-	public AudioClip punch;
+	public AudioSource theMusic;
+
+	public AudioClip crashCar;
 	public AudioClip whoosh;
+	public AudioClip musicMenu;
 
 	public bool isFallingDownFinished = false;
 	public bool isBlinking = false;
@@ -33,8 +36,11 @@ public class MenuManager : MonoBehaviour {
 
 	void Start () {
 		theSong = GetComponent<AudioSource> ();
+		theMusic = GetComponent<AudioSource> ();
 		for (int i = 0; i < t_Title.Length; i++)
 			StartCoroutine(letterFall(t_Title[i]));
+		theSong.clip = crashCar;
+		theSong.Play ();
 	}
 	
 	// Update is called once per frame
@@ -61,14 +67,11 @@ public class MenuManager : MonoBehaviour {
 			menuState = e_MenuState.Idle;
 			break;
 		}
-		if (isFallingDownFinished) 
-		{
+		if (isFallingDownFinished) {
 			for (int i = 0; i < t_Title.Length; i++)
 				t_Title [i].gameObject.SetActive (false);
 			titleMenu.gameObject.SetActive (true);
-			theSong.clip = punch;
-			theSong.Play ();
-			isFallingDownFinished = false;
+			isFallingDownFinished = false;		
 			StartCoroutine (titleUp ());
 		}
 	}
@@ -82,6 +85,8 @@ public class MenuManager : MonoBehaviour {
 		}
 		MainMenu.SetActive (true);
 		isBlinking = true;
+		theMusic.clip = musicMenu;
+		theMusic.Play ();
 	}
 
 	IEnumerator letterFall(RectTransform p_rect)
