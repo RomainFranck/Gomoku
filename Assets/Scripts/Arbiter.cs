@@ -151,7 +151,7 @@ public class Arbiter
                 List<t_vecPattern> vecToRemove = new List<t_vecPattern>();
                 foreach(t_vecPattern dir in directionsList)
                 {
-                    vecToRemove.Add(directionsList.Find((t_vecPattern obj) => { return obj.First == new Vector2(dir.First.x * -1, dir.First.y * -1); }));
+                    vecToRemove.Add(directionsList.Find((t_vecPattern obj) => { return obj.First.x == dir.First.x * -1 && obj.First.y == dir.First.y * -1; }));
                 }
 
                 foreach(t_vecPattern toRemove in vecToRemove)
