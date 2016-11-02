@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Board
 {
 
-    public bool update = false;
+    public List<Vector2> updatePool = new List<Vector2>();
 
     private char[] _byteBoard = new char[81];
 
@@ -18,7 +18,7 @@ public class Board
             char mask = (char)(3 << shift);
             char val = (char)((int)value << shift);
             _byteBoard[(x * 18 + y) / 4] = (char)(octet & ~mask | val);
-            update = true;
+            updatePool.Add(new Vector2(x, y));
         }
     }
 
