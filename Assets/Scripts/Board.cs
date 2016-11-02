@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Board {
+public class Board
+{
 
     public bool update = false;
 
@@ -10,11 +11,15 @@ public class Board {
     public e_cell this[int x, int y]
     {
         get { return (e_cell)((_byteBoard[(x * 18 + y) / 4] >> (2 * ((x * 18 + y) % 4))) % 4); }
-        set { char octet = _byteBoard[(x * 18 + y) / 4];
+        set
+        {
+            char octet = _byteBoard[(x * 18 + y) / 4];
             char shift = (char)(2 * ((x * 18 + y) % 4));
             char mask = (char)(3 << shift);
             char val = (char)((int)value << shift);
-            _byteBoard[(x * 18 + y) / 4] = (char)(octet & ~mask | val); }
+            _byteBoard[(x * 18 + y) / 4] = (char)(octet & ~mask | val);
+            update = true;
+        }
     }
 
     public enum e_cell
@@ -26,14 +31,12 @@ public class Board {
 
     public Board()
     {
-        for (int i = 0; i < 18 ; i++)
+        for (int i = 0; i < 18; i++)
         {
-            for(int j = 0; j < 18; j++)
+            for (int j = 0; j < 18; j++)
             {
                 this[i, j] = e_cell.Empty;
             }
         }
     }
-
-
 }

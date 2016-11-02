@@ -68,13 +68,13 @@ public class Arbiter
 
     public TextMesh textMesh;
 
-    private static bool checkDoubleThrees = true;
+    public static bool checkDoubleThrees = true;
     public static void toggleDoubleThrees()
     {
         checkDoubleThrees = !checkDoubleThrees;
     }
 
-    private static bool checkBreakableFive = true;
+    public static bool checkBreakableFive = true;
     public static void toggleBreakableFive()
     {
         checkBreakableFive = !checkBreakableFive;
@@ -241,8 +241,6 @@ public class Arbiter
             return;
 
         int returnValue = move(x, y, currentPlayer.color);
-
-        board.update = true;
 
         if (returnValue == -1)
         {
