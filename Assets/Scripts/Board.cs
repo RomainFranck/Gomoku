@@ -39,4 +39,13 @@ public class Board
             }
         }
     }
+
+	public void reset()
+	{
+		for (int i = 0; i < 18; i++) {
+			for (int j = 0; j < 18; j++) {
+				this [i, j] = e_cell.Empty;
+			}
+		}
+	}
 }

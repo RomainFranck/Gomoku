@@ -30,7 +30,7 @@ public class Checkerboard : MonoBehaviour
             }
             
         }
-
+		_board.reset ();
         transform.Rotate(-30, 0, 0);
         
     }
