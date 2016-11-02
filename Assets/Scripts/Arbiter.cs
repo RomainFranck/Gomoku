@@ -130,11 +130,15 @@ public class Arbiter
 
             if (dir != null)
             {
-                directionsList.Add(dir);
+                if (pattern != _freeThrees[1] || directionsList.Find((t_vecPattern vp) =>
+                {
+                    return (dir.First == (vp.First * -1));
+                }) == null)
+                {
+                    directionsList.Add(dir);
+                }
             }
         }
-
-        Debug.Log(directionsList.Count);
 
         return directionsList;
     }
@@ -146,19 +150,6 @@ public class Arbiter
         foreach (t_Pattern pattern in _freeThrees)
         {
             directionsList.AddRange(checkPatternInEveryDirection(x, y, pattern, color));
-            if (pattern == _freeThrees[1])
-            {
-                List<t_vecPattern> vecToRemove = new List<t_vecPattern>();
-                foreach(t_vecPattern dir in directionsList)
-                {
-                    vecToRemove.Add(directionsList.Find((t_vecPattern obj) => { return obj.First.x == dir.First.x * -1 && obj.First.y == dir.First.y * -1; }));
-                }
-
-                foreach(t_vecPattern toRemove in vecToRemove)
-                {
-                    directionsList.Remove(toRemove);
-                }
-            }
         }
 
         if (directionsList.Count > 1)
