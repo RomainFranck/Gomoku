@@ -11,7 +11,7 @@ public class BreakableFiveButtonComponent : MonoBehaviour
     void Start()
     {
         image = GetComponent<Image>();
-        image.sprite = sprites[Arbiter.checkDoubleThrees ? 0 : 1];
+        image.sprite = sprites[Arbiter.checkBreakableFive ? 0 : 1];
     }
 
     // Update is called once per frame
