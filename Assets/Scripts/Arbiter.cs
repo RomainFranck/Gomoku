@@ -21,7 +21,7 @@ public class Arbiter
     public bool isPlaying { get; private set; }
 
 
-    private static Vector2[] _directions = {new Vector2(1, 0),
+    public static Vector2[] directions = {new Vector2(1, 0),
                                             new Vector2(1, 1),
                                             new Vector2(0, 1),
                                             new Vector2(-1, 1),
@@ -52,9 +52,9 @@ public class Arbiter
 
     public Board board = new Board();
 
-    public Player player1 = new Player("player 1", Board.e_cell.White);
-    public Player player2 = new Player("player 2", Board.e_cell.Black);
-    public Player currentPlayer;
+    public APlayer player1 = new Player("player 1", Board.e_cell.White);
+    public APlayer player2 = new IA("IA 1", Board.e_cell.Black);
+    public APlayer currentPlayer;
 
     internal void AddLight(TrafficLightComponent trafficLightComponent, int order)
     {
@@ -107,7 +107,7 @@ public class Arbiter
         {
             Vector2 p = new Vector2(x + pattern.First[i] * (int)(direction.x), y + pattern.First[i] * (int)(direction.y));
 
-            if (p.x > 0 && p.x < 18 && p.y > 0 && p.y < 18)
+            if (p.x >= 0 && p.x < 18 && p.y >= 0 && p.y < 18)
             {
                 isPattern &= (board[(int)(p.x), (int)(p.y)] == (pattern.Second[i] == e_cellColor.Same ? color : pattern.Second[i] == e_cellColor.Inverse ? color == Board.e_cell.Black ? Board.e_cell.White : Board.e_cell.Black : Board.e_cell.Empty));
             }
@@ -124,7 +124,7 @@ public class Arbiter
     {
         List<t_vecPattern> directionsList = new List<t_vecPattern>();
 
-        foreach (Vector2 direction in _directions)
+        foreach (Vector2 direction in directions)
         {
             t_vecPattern dir = checkPattern(x, y, pattern, color, direction);
 
@@ -223,13 +223,13 @@ public class Arbiter
         return returnValue;
     }
 
-    public void input(int x, int y)
+    public int input(int x, int y)
     {
         if ((isPlaying == false)||x > 18 || y > 18 || x < 0 || y < 0 || board[x, y] != Board.e_cell.Empty)
-            return;
+            return 0;
 
         if (checkDoubleThrees && isDoubleThree(x, y, currentPlayer.color) == true)
-            return;
+            return 0;
 
         int returnValue = move(x, y, currentPlayer.color);
 
@@ -257,6 +257,8 @@ public class Arbiter
         currentPlayer.setLight(false);
         currentPlayer = currentPlayer == player1 ? player2 : player1;
         currentPlayer.setLight(true);
+        currentPlayer.changeTurn.Invoke(this, board, x * 18 + y);
 
+        return returnValue == -1 ? 2 : 1;
     }
 }

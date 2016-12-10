@@ -1,23 +1,53 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Board
 {
 
     public List<Vector2> updatePool = new List<Vector2>();
 
-    private char[] _byteBoard = new char[81];
+    private BitArray _whiteMask = new BitArray(18 * 18);
+    private BitArray _blackMask = new BitArray(18 * 18);
+
+    public BitArray getWhiteMask()
+    {
+        return new BitArray(_whiteMask);
+    }
+
+    public BitArray getBlackMask()
+    {
+        return new BitArray(_blackMask);
+    }
+
+    public BitArray getMask(Board.e_cell p_color)
+    {
+        return p_color == e_cell.Black ? getBlackMask() : getWhiteMask();
+    }
+
+    public BitArray getPresenceMask()
+    {
+        return (new BitArray(_whiteMask)).Or(_blackMask);
+    }
 
     public e_cell this[int x, int y]
     {
-        get { return (e_cell)((_byteBoard[(x * 18 + y) / 4] >> (2 * ((x * 18 + y) % 4))) % 4); }
+        get { return _whiteMask[18 * x + y] ? e_cell.White : _blackMask[18 * x + y] ? e_cell.Black : e_cell.Empty; }
         set
         {
-            char octet = _byteBoard[(x * 18 + y) / 4];
-            char shift = (char)(2 * ((x * 18 + y) % 4));
-            char mask = (char)(3 << shift);
-            char val = (char)((int)value << shift);
-            _byteBoard[(x * 18 + y) / 4] = (char)(octet & ~mask | val);
+            switch (value)
+            {
+                case (e_cell.White):
+                    _whiteMask[18 * x + y] = true;
+                    break;
+                case (e_cell.Black):
+                    _blackMask[18 * x + y] = true;
+                    break;
+                case (e_cell.Empty):
+                    _blackMask[18 * x + y] = false;
+                    _whiteMask[18 * x + y] = false;
+                    break;
+            }
             updatePool.Add(new Vector2(x, y));
         }
     }
@@ -27,6 +57,7 @@ public class Board
         Empty = 0,
         Black = 1,
         White = 2,
+        None,
     };
 
     public Board()
