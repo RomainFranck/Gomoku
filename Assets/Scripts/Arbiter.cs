@@ -255,9 +255,13 @@ public class Arbiter
         }
 
         currentPlayer.setLight(false);
-        currentPlayer = currentPlayer == player1 ? player2 : player1;
-        currentPlayer.setLight(true);
-        currentPlayer.changeTurn.Invoke(this, board, x * 18 + y);
+
+        if (isPlaying)
+        {
+            currentPlayer = currentPlayer == player1 ? player2 : player1;
+            currentPlayer.setLight(true);
+            currentPlayer.changeTurn.Invoke(this, board, x * 18 + y);
+        }
 
         return returnValue == -1 ? 2 : 1;
     }
