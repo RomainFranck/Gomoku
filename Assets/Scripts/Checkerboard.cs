@@ -55,5 +55,7 @@ public class Checkerboard : MonoBehaviour
 	public void Retour()
 	{
 		Application.LoadLevel("Menu");
+		_board.reset ();
+		Arbiter.Instance.isPlaying = true;
 	}
 }
