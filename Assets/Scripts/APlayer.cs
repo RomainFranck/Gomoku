@@ -1,6 +1,6 @@
 ﻿using System;
 
-public delegate void turnChangedEvent(object sender, Board p_board, int position);
+public delegate void turnChangedEvent(object sender, Board p_board);
 
 public abstract class APlayer
 {
@@ -12,7 +12,8 @@ public abstract class APlayer
 
     public void setLight(bool p_light)
     {
-        trafficLight.setLight(p_light);
+        if (trafficLight != null)
+            trafficLight.setLight(p_light);
     }
 
     public int capturedPawns = 0;

@@ -18,7 +18,7 @@ enum e_cellColor
 
 public class Arbiter
 {
-    public bool isPlaying { get; private set; }
+    public bool isPlaying { get; set; }
 
 
     public static Vector2[] directions = {new Vector2(1, 0),
@@ -97,6 +97,8 @@ public class Arbiter
     {
         isPlaying = true;
         currentPlayer = player1;
+        currentPlayer.setLight(true);
+        currentPlayer.changeTurn.Invoke(this, board);
     }
 
     private t_vecPattern checkPattern(int x, int y, t_Pattern pattern, Board.e_cell color, Vector2 direction)
@@ -196,7 +198,6 @@ public class Arbiter
 
                 if (breakers.Count == 0)
                     return true;
-                Debug.Log(breakers.Count);
             }
         }
 
@@ -254,13 +255,25 @@ public class Arbiter
             }
         }
 
+        for (int i = 0; i < 18; i++)
+        {
+            for (int j = 0; j < 18; j++)
+            {
+                if (board[i,j] == currentPlayer.color)
+                {
+                    if (isWinningMove(i, j, currentPlayer.color))
+                        returnValue = -1;
+                }
+            }
+        }
+
         currentPlayer.setLight(false);
 
         if (isPlaying)
         {
             currentPlayer = currentPlayer == player1 ? player2 : player1;
             currentPlayer.setLight(true);
-            currentPlayer.changeTurn.Invoke(this, board, x * 18 + y);
+            currentPlayer.changeTurn.Invoke(this, board);
         }
 
         return returnValue == -1 ? 2 : 1;

@@ -36,7 +36,7 @@ public class IA : APlayer
         }
     }
 
-    public void playNextMove(object sender, Board p_Board, int position)
+    public void playNextMove(object sender, Board p_Board)
     {
        for (int x = 0; x < 18; x++)
         {

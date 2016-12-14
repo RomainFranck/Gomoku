@@ -5,6 +5,6 @@
         this.name = p_name;
         this.color = p_color;
 
-        this.changeTurn += (object s, Board b, int i) => { };
+        this.changeTurn += (object s, Board b) => { };
     }
 }
