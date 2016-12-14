@@ -17,6 +17,7 @@ public class IA : APlayer
         new Threat(new bool[]{false, true, true, false, false}, 12),
         new Threat(new bool[]{true, false, true}, 12),
         new Threat(new bool[]{true, false, false}, 8),
+        new Threat(new bool[] {false, true, true,}, 30),
         new Threat(new bool[]{false, false, false, false, false}, 1),
         new Threat(new bool[]{false, true}, 2),
     };
