@@ -57,5 +57,8 @@ public class Checkerboard : MonoBehaviour
 		Application.LoadLevel("Menu");
 		_board.reset ();
 		Arbiter.Instance.isPlaying = true;
+		Arbiter.Instance.currentPlayer = Arbiter.Instance.player1;
+		Arbiter.Instance.player1.capturedPawns = 0;
+		Arbiter.Instance.player2.capturedPawns = 0;
 	}
 }
